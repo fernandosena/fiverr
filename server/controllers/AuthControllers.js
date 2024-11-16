@@ -25,13 +25,10 @@ export const signUp = async (req, res, next) => {
           password: await generatePassword(password),
         },
       });
-      return res
-        .cookie("jwt", createToken(email, user.id), {
-          httpOnLy: false,
-          maxAge: maxAge * 1000,
-        })
-        .status(201)
-        .json({ user: { id: user.id, email: user.email } });
+      return res.status(200).json({
+        user: { id: user.id, email: user.email },
+        jwt: createToken(email, user.id),
+      });
     }
     return res.status(400).send("Email and Password required");
   } catch (err) {
@@ -58,13 +55,10 @@ export const login = async (req, res, next) => {
         return res.status(400).send("Invalid password");
       }
 
-      return res
-        .cookie("jwt", createToken(email, user.id), {
-          httpOnLy: false,
-          maxAge: maxAge * 1000,
-        })
-        .status(200)
-        .json({ user: { id: user.id, email: user.email } });
+      return res.status(200).json({
+        user: { id: user.id, email: user.email },
+        jwt: createToken(email, user.id),
+      });
     }
     return res.status(400).send("Email and Password required");
   } catch (err) {

@@ -3,10 +3,12 @@ import { StateContext, useStateProvider } from "@/context/StateContext";
 import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
 import axios from "axios";
 import React, { useContext, useState } from "react";
+import { useCookies } from "react-cookie";
 import { FcGoogle } from "react-icons/fc";
 import { MdFacebook } from "react-icons/md";
 
 export default function AuthWrapper({ type }) {
+  const [cookies, setCookies] = useCookies();
   const {
     state: { showLoginModal, showSignupModal },
     dispatch,
@@ -21,11 +23,14 @@ export default function AuthWrapper({ type }) {
     try {
       const { email, password } = values;
       if (email && password) {
-        const { data } = await axios.post(
+        const {
+          data: { user, jwt },
+        } = await axios.post(
           type === "login" ? LOGIN_ROUTE : SIGNUP_ROUTE,
           { email, password },
           { withCredentials: true }
         );
+        setCookies("jwt", { jwt });
         dispatch({ type: reducerCases.CLOSE_AUTH_MODEL });
         if (user) {
           dispatch({ type: reducerCases.SET_USER, userInfo: user });
