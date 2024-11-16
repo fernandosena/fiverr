@@ -4,3 +4,5 @@ export const API_URL = `${HOST}/api`;
 export const AUTH_ROUTER = `${API_URL}/auth`;
 
 export const SIGNUP_ROUTE = `${AUTH_ROUTER}/signup`;
+
+export const LOGIN_ROUTE = `${AUTH_ROUTER}/login`;

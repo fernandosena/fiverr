@@ -1,5 +1,7 @@
 import { reducerCases } from "@/context/constants";
 import { StateContext, useStateProvider } from "@/context/StateContext";
+import { LOGIN_ROUTE, SIGNUP_ROUTE } from "@/utils/constants";
+import axios from "axios";
 import React, { useContext, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { MdFacebook } from "react-icons/md";
@@ -13,6 +15,26 @@ export default function AuthWrapper({ type }) {
   const [values, setValues] = useState({ email: "", password: "" });
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const handleClick = async () => {
+    try {
+      const { email, password } = values;
+      if (email && password) {
+        const { data } = await axios.post(
+          type === "login" ? LOGIN_ROUTE : SIGNUP_ROUTE,
+          { email, password },
+          { withCredentials: true }
+        );
+        dispatch({ type: reducerCases.CLOSE_AUTH_MODEL });
+        if (user) {
+          dispatch({ type: reducerCases.SET_USER, userInfo: user });
+          window.location.reload();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <div className="fixed top-0 z-[100]">
@@ -61,7 +83,11 @@ export default function AuthWrapper({ type }) {
                 value={values.password}
                 onChange={handleChange}
               />
-              <button className="bg-[#1DBF73] text-white px-12 text-lg font-semibold rounded-r-md p-3 w-80">
+              <button
+                type="button"
+                className="bg-[#1DBF73] text-white px-12 text-lg font-semibold rounded-r-md p-3 w-80"
+                onClick={handleClick}
+              >
                 Continue
               </button>
             </div>
