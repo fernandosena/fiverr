@@ -16,11 +16,12 @@ import reducer, { initialState } from "@/context/StateReduces";
 import { useContext, useReducer } from "react";
 
 export default function Home() {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { showLoginModal, showSignupModal } = state;
+  const {
+    state: { showLoginModal, showSignupModal },
+  } = useStateProvider();
 
   return (
-    <StateContext value={{ state, dispatch }}>
+    <>
       <HeroBanner />
       <Companies />
       <PopularServices />
@@ -31,6 +32,6 @@ export default function Home() {
       {(showLoginModal || showSignupModal) && (
         <AuthWrapper type={showLoginModal ? "login" : "signup"} />
       )}
-    </StateContext>
+    </>
   );
 }
