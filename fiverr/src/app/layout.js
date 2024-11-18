@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
-import AppContext from "./AppContext";
+import AppContext from "./_app";
 
 export const metadata = {
   title: "Fiverr",
